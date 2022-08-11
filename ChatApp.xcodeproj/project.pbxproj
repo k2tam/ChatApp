@@ -15,6 +15,8 @@
 		05C1A35728A4F8B500749696 /* LexendDeca-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05C1A35428A4F8B500749696 /* LexendDeca-SemiBold.ttf */; };
 		05C1A35828A4F8B500749696 /* LexendDeca-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 05C1A35528A4F8B500749696 /* LexendDeca-Bold.ttf */; };
 		05C1A35B28A5047900749696 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C1A35A28A5047900749696 /* Fonts.swift */; };
+		05C1A35E28A52ED700749696 /* CustomTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C1A35D28A52ED700749696 /* CustomTabBar.swift */; };
+		05C1A36028A541AF00749696 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C1A35F28A541AF00749696 /* TabButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		05C1A35528A4F8B500749696 /* LexendDeca-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LexendDeca-Bold.ttf"; sourceTree = "<group>"; };
 		05C1A35928A5017D00749696 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		05C1A35A28A5047900749696 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		05C1A35D28A52ED700749696 /* CustomTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBar.swift; sourceTree = "<group>"; };
+		05C1A35F28A541AF00749696 /* TabButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				05C1A34128A4F2AE00749696 /* RootView.swift */,
+				05C1A35C28A52EB900749696 /* Custom Tab Bar */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -127,6 +132,15 @@
 				05C1A35428A4F8B500749696 /* LexendDeca-SemiBold.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		05C1A35C28A52EB900749696 /* Custom Tab Bar */ = {
+			isa = PBXGroup;
+			children = (
+				05C1A35D28A52ED700749696 /* CustomTabBar.swift */,
+				05C1A35F28A541AF00749696 /* TabButton.swift */,
+			);
+			path = "Custom Tab Bar";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -202,8 +216,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05C1A35E28A52ED700749696 /* CustomTabBar.swift in Sources */,
 				05C1A34228A4F2AE00749696 /* RootView.swift in Sources */,
 				05C1A35B28A5047900749696 /* Fonts.swift in Sources */,
+				05C1A36028A541AF00749696 /* TabButton.swift in Sources */,
 				05C1A34028A4F2AE00749696 /* ChatAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

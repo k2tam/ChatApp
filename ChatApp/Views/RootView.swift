@@ -8,9 +8,20 @@
 import SwiftUI
 
 struct RootView: View {
+    @State var tabSelected:Tabs = Tabs.contacts
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        
+        VStack{
+            Text("Hello, world!")
+                .padding()
+            
+            Spacer()
+            
+            
+            CustomTabBar(selectedTab: $tabSelected)
+        }
+       
     }
     
 }
