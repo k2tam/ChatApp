@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RootView: View {
     @State var tabSelected:Tabs = Tabs.contacts
+    @State var isOnboarding = !AuthViewModel.isLoggedIn()
     
     var body: some View {
         
@@ -21,6 +22,13 @@ struct RootView: View {
             
             CustomTabBar(selectedTab: $tabSelected)
         }
+        .fullScreenCover(isPresented: $isOnboarding) {
+            //On Dismiss
+        } content: {
+            //On boarding sequence
+            OnBoardingContainerView(isOnBoarding: $isOnboarding)
+        }
+
        
     }
     
