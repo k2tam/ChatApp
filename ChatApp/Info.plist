@@ -5,11 +5,9 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>xcom.googleusercontent.apps.619726094036-r5p1a25qajj9q2cd48pdboms42p8qu9k</string>
+				<string>com.googleusercontent.apps.619726094036-r5p1a25qajj9q2cd48pdboms42p8qu9k</string>
 			</array>
 		</dict>
 	</array>
@@ -19,5 +17,7 @@
 		<string>LexendDeca-Regular.ttf</string>
 		<string>LexendDeca-Bold.ttf</string>
 	</array>
+	<key>NSContactsUsageDescription</key>
+	<string>Sync contacts to chat with them</string>
 </dict>
 </plist>

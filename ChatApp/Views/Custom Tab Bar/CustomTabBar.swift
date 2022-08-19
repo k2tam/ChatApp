@@ -31,6 +31,8 @@ struct CustomTabBar: View {
             
             Button {
                 //TODO:
+                
+                AuthViewModel.logOut()
             } label: {
                 VStack(alignment: .center, spacing: 4){
                     Image(systemName: "plus.circle.fill")

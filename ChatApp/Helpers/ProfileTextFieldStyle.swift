@@ -18,6 +18,7 @@ struct ProfileTextFieldStyle: TextFieldStyle{
             
             //Reference the textfield
             configuration
+                .padding(.leading)
                 .font(Font.tabBar)
         }
     }

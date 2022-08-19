@@ -13,14 +13,25 @@ struct RootView: View {
     
     var body: some View {
         
-        VStack{
-            Text("Hello, world!")
-                .padding()
+        ZStack{
+            Color("background")
+                .ignoresSafeArea()
             
-            Spacer()
-            
-            
-            CustomTabBar(selectedTab: $tabSelected)
+            VStack{
+                
+                switch tabSelected {
+                    
+                case .chats:
+                    ChatsListView()
+                case .contacts:
+                    ContacsListView()
+                }
+                
+                Spacer()
+                
+                
+                CustomTabBar(selectedTab: $tabSelected)
+            }
         }
         .fullScreenCover(isPresented: $isOnboarding) {
             //On Dismiss
@@ -28,14 +39,10 @@ struct RootView: View {
             //On boarding sequence
             OnBoardingContainerView(isOnBoarding: $isOnboarding)
         }
-
-       
+        .navigationBarHidden(true)
+    
     }
     
 }
 
-struct RootView_Previews: PreviewProvider {
-    static var previews: some View {
-        RootView()
-    }
-}
+
