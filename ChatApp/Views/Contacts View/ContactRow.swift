@@ -16,42 +16,8 @@ struct ContactRow: View {
             let photoUrl = URL(string: user.photo ?? "")
             
             //Profile image
-            ZStack{
-                
-                
-                //Profile image
-                AsyncImage(url: photoUrl) { phase in
-                    switch phase{
-                    case AsyncImagePhase.empty:
-                        //Currently fetching
-                        ProgressView()
-                        
-                    case AsyncImagePhase.success(let image):
-                        //Display the fetched image
-                        image
-                            .resizable()
-                            .scaledToFill()
-                    case AsyncImagePhase.failure(let error):
-                        //Couldn't fetch profile photo
-                        //Display circle with first letter of first name
-                        ZStack {
-                            Circle()
-                                .foregroundColor(.white)
-                            
-                            Text(user.firstName?.prefix(1) ?? "")
-                                .bold()
-                        }
-                    }
-                    
-                }
-                                
-                
-                //Blue border
-                Circle()
-                    .stroke(Color("create-profile-border"), lineWidth: 2)
-            }
-            .frame(width: 44, height: 44)
-
+           ProfilePicView(user: user)
+            
             
             VStack(alignment: .leading, spacing: 4){
                 //Name

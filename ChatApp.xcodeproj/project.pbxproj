@@ -15,6 +15,9 @@
 		057496F928A7F1AE003FFCB0 /* TextHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 057496F828A7F1AE003FFCB0 /* TextHelper.swift */; };
 		0574971728ACD889003FFCB0 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0574971628ACD889003FFCB0 /* ImagePicker.swift */; };
 		0574971928AE14B2003FFCB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0574971828AE14B2003FFCB0 /* AppDelegate.swift */; };
+		059601DC28B0A5A700187E3E /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601DB28B0A5A700187E3E /* ConversationView.swift */; };
+		059601DF28B0AA6F00187E3E /* ProfilePicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601DE28B0AA6F00187E3E /* ProfilePicView.swift */; };
+		059601E328B0C89300187E3E /* RoundedCornerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601E228B0C89300187E3E /* RoundedCornerExtension.swift */; };
 		05C1A34028A4F2AE00749696 /* ChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C1A33F28A4F2AE00749696 /* ChatApp.swift */; };
 		05C1A34228A4F2AE00749696 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C1A34128A4F2AE00749696 /* RootView.swift */; };
 		05C1A34428A4F2AF00749696 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05C1A34328A4F2AF00749696 /* Assets.xcassets */; };
@@ -50,6 +53,9 @@
 		057496F828A7F1AE003FFCB0 /* TextHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextHelper.swift; sourceTree = "<group>"; };
 		0574971628ACD889003FFCB0 /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		0574971828AE14B2003FFCB0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		059601DB28B0A5A700187E3E /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
+		059601DE28B0AA6F00187E3E /* ProfilePicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicView.swift; sourceTree = "<group>"; };
+		059601E228B0C89300187E3E /* RoundedCornerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerExtension.swift; sourceTree = "<group>"; };
 		05C1A33C28A4F2AE00749696 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1A33F28A4F2AE00749696 /* ChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatApp.swift; sourceTree = "<group>"; };
 		05C1A34128A4F2AE00749696 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -105,8 +111,17 @@
 			isa = PBXGroup;
 			children = (
 				05346CDF28AF87CA007F8E48 /* ChatsListView.swift */,
+				059601DB28B0A5A700187E3E /* ConversationView.swift */,
 			);
 			path = "Chats View";
+			sourceTree = "<group>";
+		};
+		059601DD28B0AA1C00187E3E /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				059601DE28B0AA6F00187E3E /* ProfilePicView.swift */,
+			);
+			path = Misc;
 			sourceTree = "<group>";
 		};
 		05C1A33328A4F2AE00749696 = {
@@ -161,6 +176,7 @@
 				05C1A35C28A52EB900749696 /* Custom Tab Bar */,
 				05346CDB28AF864C007F8E48 /* Contacts View */,
 				05346CDC28AF8662007F8E48 /* Chats View */,
+				059601DD28B0AA1C00187E3E /* Misc */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -189,6 +205,7 @@
 				05C1A37C28A68CA200749696 /* OnboardingButtonStyle.swift */,
 				05C1A37E28A6A9A700749696 /* ProfileTextFieldStyle.swift */,
 				057496F828A7F1AE003FFCB0 /* TextHelper.swift */,
+				059601E228B0C89300187E3E /* RoundedCornerExtension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -340,7 +357,10 @@
 				05C1A37928A6770500749696 /* VerificationView.swift in Sources */,
 				05C1A36028A541AF00749696 /* TabButton.swift in Sources */,
 				05C1A37D28A68CA200749696 /* OnboardingButtonStyle.swift in Sources */,
+				059601E328B0C89300187E3E /* RoundedCornerExtension.swift in Sources */,
 				05C1A34028A4F2AE00749696 /* ChatApp.swift in Sources */,
+				059601DF28B0AA6F00187E3E /* ProfilePicView.swift in Sources */,
+				059601DC28B0A5A700187E3E /* ConversationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

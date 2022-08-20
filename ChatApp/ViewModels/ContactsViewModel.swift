@@ -71,15 +71,15 @@ class ContactsViewModel: ObservableObject{
         //If filter text is empty then reveal all user
         if filterText == "" {
             self.filteredUsers = users
-            return 
+            return
         }
         
         //Run the users list through the filter term to get a list of filtered users
         self.filteredUsers = users.filter({ user in
             //Criteria for including this user info into filtered list
-            user.firstName?.contains(filterText) ?? false ||
-            user.lastName?.contains(filterText) ?? false ||
-            user.phone?.contains(filterText) ?? false
+            user.firstName?.lowercased().contains(filterText) ?? false ||
+            user.lastName?.lowercased().contains(filterText) ?? false ||
+            user.phone?.lowercased().contains(filterText) ?? false
         })
     }
 }

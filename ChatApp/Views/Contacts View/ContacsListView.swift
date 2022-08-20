@@ -10,6 +10,7 @@ import SwiftUI
 struct ContacsListView: View {
     
     @EnvironmentObject var contactViewModel: ContactsViewModel
+    @Binding var isChatShowing: Bool
     @State var filterText = ""
     
     var body: some View {
@@ -48,16 +49,34 @@ struct ContacsListView: View {
             .frame(height: 46)
             .onChange(of: filterText) {value in
                 //Filter the results
-                contactViewModel.filterContacts(filterBy: filterText)
+                contactViewModel.filterContacts(filterBy: filterText.lowercased()
+                    .trimmingCharacters(in: .whitespacesAndNewlines))
+                
             }
             
             if contactViewModel.filteredUsers.count > 0{
                 //List
                 List(contactViewModel.filteredUsers){ user in
-                    //TODO: Display rows
-                    ContactRow(user: user)
+                    
+                    Button {
+                        //Display conversation view
+                        isChatShowing = true
+                        
+                        
+                    } label: {
+                        //Display rows
+                        ContactRow(user: user)
+                           
+                    }
+                    .buttonStyle(.plain)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
+
+                    
+                    
                 }
                 .listStyle(.plain)
+                .padding(.top, 12)
             }else{
                 Spacer()
                 Image("no-contacts-yet")
@@ -85,6 +104,6 @@ struct ContacsListView: View {
 
 struct ContacsListView_Previews: PreviewProvider {
     static var previews: some View {
-        ContacsListView()
+        ContacsListView(isChatShowing: Binding.constant(true))
     }
 }
