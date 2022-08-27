@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct RootView: View {
+    
+    //For detecting when the app state changes
+    @Environment(\.scenePhase) var scenePhase
+    
+    @EnvironmentObject var chatViewModel: ChatViewModel
+    
     @State var tabSelected:Tabs = Tabs.contacts
     @State var isOnboarding = !AuthViewModel.isLoggedIn()
     
@@ -24,7 +30,7 @@ struct RootView: View {
                 switch tabSelected {
                     
                 case .chats:
-                    ChatsListView()
+                    ChatsListView(isChatShowing: $isChatShowing)
                 case .contacts:
                     ContacsListView(isChatShowing: $isChatShowing)
                 }
@@ -44,7 +50,21 @@ struct RootView: View {
         .fullScreenCover(isPresented: $isChatShowing, onDismiss: nil) {
             //The conversation view
             ConversationView(isChatShowing: $isChatShowing)
-        }
+        }.onChange(of: scenePhase, perform: { newPhase in
+            var body: some View {
+                    Text("Hello, world!")
+                        .padding()
+                        .onChange(of: scenePhase) { newPhase in
+                            if newPhase == .active {
+                                print("Active")
+                            } else if newPhase == .inactive {
+                                print("Inactive")
+                            } else if newPhase == .background {
+                                chatViewModel.chatListViewCleanup()
+                            }
+                        }
+                }
+        })
         .navigationBarHidden(true)
     
     }

@@ -10,19 +10,22 @@ import SwiftUI
 struct ContacsListView: View {
     
     @EnvironmentObject var contactViewModel: ContactsViewModel
+    @EnvironmentObject var chatViewModel: ChatViewModel
+    
     @Binding var isChatShowing: Bool
     @State var filterText = ""
     
     var body: some View {
         
         VStack{
+            //Heading
             HStack{
                 Text("Contacts")
                     .font(Font.pageTitle)
                 Spacer()
                 
                 Button {
-                    
+                    //TODO: Settings
                 } label: {
                     Image(systemName: "gearshape.fill")
                         .resizable()
@@ -59,6 +62,9 @@ struct ContacsListView: View {
                 List(contactViewModel.filteredUsers){ user in
                     
                     Button {
+                        //Search for an existing conversation with this user
+                        chatViewModel.getChatFor(contact: user)
+                        
                         //Display conversation view
                         isChatShowing = true
                         
@@ -77,7 +83,8 @@ struct ContacsListView: View {
                 }
                 .listStyle(.plain)
                 .padding(.top, 12)
-            }else{
+            }
+            else{
                 Spacer()
                 Image("no-contacts-yet")
                 

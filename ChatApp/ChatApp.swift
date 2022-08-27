@@ -20,6 +20,7 @@ struct ChatApp: App {
             NavigationView {
                 RootView()
                     .environmentObject(ContactsViewModel())
+                    .environmentObject(ChatViewModel())
             }
         }
     }

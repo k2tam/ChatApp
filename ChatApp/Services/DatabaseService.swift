@@ -7,103 +7,103 @@
 
 import Foundation
 import Contacts
-import UIKit
 import Firebase
+import UIKit
 import FirebaseStorage
 
-class DatabaseService{
+class DatabaseService {
     
-    func getPlatformUsers(localContacts: [CNContact], completion: @escaping ([User]) -> Void){
+    var chatListViewListeners = [ListenerRegistration]()
+    var conversationViewListeners = [ListenerRegistration]()
+    
+    func getPlatformUsers(localContacts: [CNContact], completion: @escaping ([User]) -> Void) {
         
-        var patformUsers = [User]()
+        // The array where we're storing fetched platform users
+        var platformUsers = [User]()
         
-        
-        //Construct an array of string phone number to look up
+        // Construct an array of string phone numbers to look up
         var lookupPhoneNumbers = localContacts.map { contact in
             
-            //Turn the contact in a phone number as a string
+            // Turn the contact into a phone number as a string
             return TextHelper.sanitizePhoneNumber(phone: contact.phoneNumbers.first?.value.stringValue ?? "")
-            
-            
         }
         
-        //Make sure there are lookup numbers
-        guard lookupPhoneNumbers.count > 0 else{
+        // Make sure that there are lookup numbers
+        guard lookupPhoneNumbers.count > 0 else {
             
-            //Callback
-            completion(patformUsers)
+            // Callback
+            completion(platformUsers)
             return
         }
-
-        //Query the database for these phone numbers
+        
+        // Query the database for these phone numbers
         let db = Firestore.firestore()
         
-       
-        while !lookupPhoneNumbers.isEmpty{
+        // Perform queries while we still have phone numbers to look up
+        while !lookupPhoneNumbers.isEmpty {
+        
+            // Get the first < 10 phone numbers to look up
+            let tenPhoneNumbers = Array(lookupPhoneNumbers.prefix(10))
             
-            //Get the first < 10 phone numbers to look up
-            let tenPhoneNumbers  = Array(lookupPhoneNumbers.prefix(10))
-            
-            //Remove the < 10 that we're looking up
+            // Remove the < 10 that we're looking up
             lookupPhoneNumbers = Array(lookupPhoneNumbers.dropFirst(10))
             
-            
-            //Look up the first 10
+            // Look up the first 10
             let query = db.collection("users").whereField("phone", in: tenPhoneNumbers)
-            
-            //Retrieve the users that are on the platform
-            query.getDocuments { querySnap, error in
-                //Check the error
-                if error == nil && querySnap != nil{
-                    //For each do that was fetched, create a user
-                    for doc in querySnap!.documents{
-                        if let user = try? doc.data(as: User.self){
-                            //Append to the platforms user array
-                            patformUsers.append(user)
+        
+            // Retrieve the users that are on the platform
+            query.getDocuments { snapshot, error in
+                
+                // Check for errors
+                if error == nil && snapshot != nil {
+                    
+                    // For each doc that was fetched, create a user
+                    for doc in snapshot!.documents {
+                        
+                        if let user = try? doc.data(as: User.self) {
+                            
+                            // Append to the platform users array
+                            platformUsers.append(user)
                         }
                     }
-                }
-                
-                //Check if have anymore phone numbers to lookup
-                //If not we can call the completion block
-                
-                if lookupPhoneNumbers.isEmpty{
-                    completion(patformUsers)
+                    
+                    // Check if we have anymore phone numbers to look up
+                    // If not, we can call the completion block and we're done
+                    if lookupPhoneNumbers.isEmpty {
+                        // Return these users
+                        completion(platformUsers)
+                    }
                 }
             }
         }
         
         
         
-        
-        //Return those users
-        completion(patformUsers)
-        
     }
     
-    func setUserProfile(firstName: String, lastName: String, image: UIImage?, completion: @escaping (Bool) -> Void){
+    func setUserProfile(firstName: String, lastName: String, image: UIImage?, completion: @escaping (Bool) -> Void) {
         
-        //Ensure that the user is logged in
-        guard AuthViewModel.isLoggedIn() != false else{
+        // Ensure that the user is logged in
+        guard AuthViewModel.isLoggedIn() != false else {
             // User is not logged in
             return
         }
         
+        // Get user's phone number
+        let userPhone = TextHelper.sanitizePhoneNumber(phone: AuthViewModel.getLoggedInUserPhone())
         
-        //Get reference to Firestore
+        // Get a reference to Firestore
         let db = Firestore.firestore()
-
-        //Set the profile data
+        
+        // Set the profile data
         let doc = db.collection("users").document(AuthViewModel.getLoggedInUserId())
+        doc.setData(["firstname": firstName,
+                     "lastname": lastName,
+                     "phone": userPhone])
         
+        // Check if an image is passed through
+        if let image = image {
         
-        doc.setData(["firstName": firstName,
-                     "lastName" : lastName,
-                     "phone"    : TextHelper.sanitizePhoneNumber(phone: AuthViewModel.getLoggedInUserPhone())])
-        
-        //Check if image is passed through
-        if let image = image{
-            
             // Create storage reference
             let storageRef = Storage.storage().reference()
             
@@ -119,68 +119,228 @@ class DatabaseService{
             let path = "images/\(UUID().uuidString).jpg"
             let fileRef = storageRef.child(path)
             
-            let uploadTask = fileRef.putData(imageData!) { meta,error in
-                if error == nil && meta != nil{
-                    //Get full url to image
+            let uploadTask = fileRef.putData(imageData!, metadata: nil) { meta, error in
+                
+                if error == nil && meta != nil
+                {
+                    // Get full url to image
                     fileRef.downloadURL { url, error in
-                        //Check for errors
-                        if url != nil && error == nil{
-                            //Set that image path to the profile
-                            doc.setData(["photo": url?.absoluteString], merge: true) { error in
+                        
+                        // Check for errors
+                        if url != nil && error == nil {
+                            
+                            // Set that image path to the profile
+                            doc.setData(["photo": url!.absoluteString], merge: true) { error in
                                 
                                 if error == nil {
-                                    //Sucess, notify caller
+                                    // Success, notify caller
                                     completion(true)
                                 }
                             }
-                        }else{
-                            //Wasn't successful in getting download url for photo
+                            
+                        }
+                        else {
+                            // Wasn't successful in getting download url for photo
                             completion(false)
                         }
                     }
-
-                }else{
-                    //Upload wasn't sucessful, notify caller
+                    
+                    
+                }
+                else {
+                    
+                    // Upload wasn't successful, notify caller
                     completion(false)
                 }
             }
             
             
         }
-        else{
-            //No image was set
+        else {
+            // No image was set
             completion(true)
         }
         
-        
-
     }
     
-    func checkUserProfile(completion: @escaping (Bool) -> Void){
-        //Check that the user is logged
+    func checkUserProfile(completion: @escaping (Bool) -> Void) {
         
-        guard AuthViewModel.isLoggedIn() != false else{
+        // Check that the user is logged
+        guard AuthViewModel.isLoggedIn() != false else {
             return
         }
         
-        //Create firebase ref
+        // Create firebase ref
         let db = Firestore.firestore()
         
         db.collection("users").document(AuthViewModel.getLoggedInUserId()).getDocument { snapshot, error in
             
-            
-            //TODO: Keep the users profile data
-            
-            if snapshot != nil && error == nil{
+            // TODO: Keep the users profile data
+            if snapshot != nil && error == nil {
                 
-                //Notfity that profile extists
+                // Notify that profile exists
                 completion(snapshot!.exists)
             }
-            else{
-                //TODO: Look into using Result type to indicate failure vs profile exists
+            else {
+                // TODO: Look into using Result type to indicate failure vs profile exists
                 completion(false)
             }
             
         }
+        
     }
+ 
+    // MARK: - Chat Methods
+    
+    /// This method returns all chat documents where the logged in user is a participant
+    func getAllChats(completion: @escaping ([Chat]) -> Void) {
+        
+        // Get a reference to the database
+        let db = Firestore.firestore()
+        
+        // Perform a query against the chat collection for any chats where the user is a participant
+        let chatsQuery = db.collection("chats")
+            .whereField("participantids",
+                        arrayContains: AuthViewModel.getLoggedInUserId())
+        
+        let listener = chatsQuery.addSnapshotListener { snapshot, error in
+            
+            if snapshot != nil && error == nil {
+                
+                var chats = [Chat]()
+                
+                // Loop through all the returned chat docs
+                for doc in snapshot!.documents {
+                    
+                    // Parse the data into Chat structs
+                    let chat = try? doc.data(as: Chat.self)
+                    
+                    // Add the chat into the array
+                    if let chat = chat {
+                        chats.append(chat)
+                    }
+                }
+                
+                // Return the data
+                completion(chats)
+            }
+            else {
+                print("Error in database retrieval")
+            }
+        }
+        
+        //Kepp track of the listner so that we can close it later
+        chatListViewListeners.append(listener)
+    }
+    
+    /// This method returns all messages for a given chat
+    func getAllMessages(chat: Chat, completion: @escaping ([ChatMessage]) -> Void) {
+        
+        // Check that the id is not nil
+        guard chat.id != nil else {
+            // Can't fetch data
+            completion([ChatMessage]())
+            return
+        }
+        
+        // Get a reference to the database
+        let db = Firestore.firestore()
+        
+        // Create the query
+        let msgsQuery = db.collection("chats")
+            .document(chat.id!)
+            .collection("msgs")
+            .order(by: "timestamp")
+        
+        // Perform the query
+        let listener = msgsQuery.addSnapshotListener { snapshot, error in
+            
+            if snapshot != nil && error == nil {
+                
+                // Loop through the msg documents and create ChatMessage instances
+                var messages = [ChatMessage]()
+                
+                for doc in snapshot!.documents {
+                    
+                    let msg = try? doc.data(as: ChatMessage.self)
+                    
+                    if let msg = msg {
+                        messages.append(msg)
+                    }
+                }
+                
+                // Return the results
+                completion(messages)
+            }
+            else {
+                print("Error in database retrieval")
+            }
+            
+        }
+        
+    
+        //Lee[ track of listener so that we can close it later
+        conversationViewListeners.append(listener)
+        
+        
+        
+    }
+    
+    /// Send a message to the database
+    func sendMessage(msg: String, chat: Chat) {
+        
+        // Check that it's a valid chat
+        guard chat.id != nil else {
+            return
+        }
+        
+        // Get reference to database
+        let db = Firestore.firestore()
+        
+        // Add msg document
+        db.collection("chats")
+            .document(chat.id!)
+            .collection("msgs")
+            .addDocument(data: ["imageurl": "",
+                                "msg": msg,
+                                "senderid": AuthViewModel.getLoggedInUserId(),
+                                "timestamp": Date()])
+        
+        // Update chat document to reflect msg that was just sent
+        db.collection("chats")
+            .document(chat.id!)
+            .setData(["updated": Date(),
+                      "lastmsg": msg],
+                     merge: true)
+    }
+    
+    func createChat(chat: Chat, completion: @escaping (String) -> Void) {
+        
+        // Get a reference to the database
+        let db = Firestore.firestore()
+        
+        // Create a document
+        let doc = db.collection("chats").document()
+        
+        // Set the data for the document
+        try? doc.setData(from: chat, completion: { error in
+            
+            // Communicate the document id
+            completion(doc.documentID)
+        })
+    }
+    
+    func detachChatListViewListeners(){
+        for listener in chatListViewListeners{
+            listener.remove()
+        }
+    }
+    
+    func detachConversationViewListeners(){
+        for listener in conversationViewListeners{
+            listener.remove()
+        }
+    }
+    
+    
 }

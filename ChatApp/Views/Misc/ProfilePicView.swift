@@ -34,6 +34,7 @@ struct ProfilePicView: View {
                         image
                             .resizable()
                             .scaledToFill()
+                            .clipShape(Circle())
                     case AsyncImagePhase.failure(let error):
                         //Couldn't fetch profile photo
                         //Display circle with first letter of first name

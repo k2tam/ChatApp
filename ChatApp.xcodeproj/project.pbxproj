@@ -18,6 +18,10 @@
 		059601DC28B0A5A700187E3E /* ConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601DB28B0A5A700187E3E /* ConversationView.swift */; };
 		059601DF28B0AA6F00187E3E /* ProfilePicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601DE28B0AA6F00187E3E /* ProfilePicView.swift */; };
 		059601E328B0C89300187E3E /* RoundedCornerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601E228B0C89300187E3E /* RoundedCornerExtension.swift */; };
+		059601E528B0E44400187E3E /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601E428B0E44400187E3E /* Chat.swift */; };
+		059601E728B200A100187E3E /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601E628B200A100187E3E /* ChatViewModel.swift */; };
+		059601E928B325AC00187E3E /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 059601E828B325AC00187E3E /* DateHelper.swift */; };
+		0597AF4F28B9F3CD00EAAE8C /* ChatsListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0597AF4E28B9F3CD00EAAE8C /* ChatsListRow.swift */; };
 		05C1A34028A4F2AE00749696 /* ChatApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C1A33F28A4F2AE00749696 /* ChatApp.swift */; };
 		05C1A34228A4F2AE00749696 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05C1A34128A4F2AE00749696 /* RootView.swift */; };
 		05C1A34428A4F2AF00749696 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 05C1A34328A4F2AF00749696 /* Assets.xcassets */; };
@@ -56,6 +60,10 @@
 		059601DB28B0A5A700187E3E /* ConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationView.swift; sourceTree = "<group>"; };
 		059601DE28B0AA6F00187E3E /* ProfilePicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePicView.swift; sourceTree = "<group>"; };
 		059601E228B0C89300187E3E /* RoundedCornerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerExtension.swift; sourceTree = "<group>"; };
+		059601E428B0E44400187E3E /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		059601E628B200A100187E3E /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		059601E828B325AC00187E3E /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		0597AF4E28B9F3CD00EAAE8C /* ChatsListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsListRow.swift; sourceTree = "<group>"; };
 		05C1A33C28A4F2AE00749696 /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		05C1A33F28A4F2AE00749696 /* ChatApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatApp.swift; sourceTree = "<group>"; };
 		05C1A34128A4F2AE00749696 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
@@ -112,6 +120,7 @@
 			children = (
 				05346CDF28AF87CA007F8E48 /* ChatsListView.swift */,
 				059601DB28B0A5A700187E3E /* ConversationView.swift */,
+				0597AF4E28B9F3CD00EAAE8C /* ChatsListRow.swift */,
 			);
 			path = "Chats View";
 			sourceTree = "<group>";
@@ -186,6 +195,7 @@
 			children = (
 				05C1A36D28A5560500749696 /* AuthViewModel.swift */,
 				05C1A38028A7CD6800749696 /* ContactsViewModel.swift */,
+				059601E628B200A100187E3E /* ChatViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -194,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				05C1A38228A7E79400749696 /* User.swift */,
+				059601E428B0E44400187E3E /* Chat.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -206,6 +217,7 @@
 				05C1A37E28A6A9A700749696 /* ProfileTextFieldStyle.swift */,
 				057496F828A7F1AE003FFCB0 /* TextHelper.swift */,
 				059601E228B0C89300187E3E /* RoundedCornerExtension.swift */,
+				059601E828B325AC00187E3E /* DateHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -338,6 +350,7 @@
 				057496F728A7ED00003FFCB0 /* DatabaseService.swift in Sources */,
 				05C1A35E28A52ED700749696 /* CustomTabBar.swift in Sources */,
 				05C1A38128A7CD6800749696 /* ContactsViewModel.swift in Sources */,
+				059601E928B325AC00187E3E /* DateHelper.swift in Sources */,
 				05C1A37528A676E400749696 /* CreateProfileView.swift in Sources */,
 				057496F928A7F1AE003FFCB0 /* TextHelper.swift in Sources */,
 				05C1A34228A4F2AE00749696 /* RootView.swift in Sources */,
@@ -352,11 +365,14 @@
 				05C1A35B28A5047900749696 /* Fonts.swift in Sources */,
 				05C1A37728A676F400749696 /* PhoneNumberView.swift in Sources */,
 				05346CE228AFAC9A007F8E48 /* ContactRow.swift in Sources */,
+				0597AF4F28B9F3CD00EAAE8C /* ChatsListRow.swift in Sources */,
 				05C1A37128A6646900749696 /* OnBoardingContainerView.swift in Sources */,
 				05346CDE28AF87AC007F8E48 /* ContacsListView.swift in Sources */,
 				05C1A37928A6770500749696 /* VerificationView.swift in Sources */,
 				05C1A36028A541AF00749696 /* TabButton.swift in Sources */,
 				05C1A37D28A68CA200749696 /* OnboardingButtonStyle.swift in Sources */,
+				059601E728B200A100187E3E /* ChatViewModel.swift in Sources */,
+				059601E528B0E44400187E3E /* Chat.swift in Sources */,
 				059601E328B0C89300187E3E /* RoundedCornerExtension.swift in Sources */,
 				05C1A34028A4F2AE00749696 /* ChatApp.swift in Sources */,
 				059601DF28B0AA6F00187E3E /* ProfilePicView.swift in Sources */,
