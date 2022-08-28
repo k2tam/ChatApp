@@ -101,6 +101,15 @@ class ChatViewModel: ObservableObject{
         databaseServiece.sendMessage(msg: msg, chat: selectedChat!)
     }
     
+    func sendPhotoMesaage(image: UIImage){
+        //Check that we have selected chat
+        guard selectedChat != nil else{
+            return
+        }
+        
+        databaseServiece.sendPhotoMessage(image: image,chat: selectedChat!)
+    }
+    
     //MARK: - Helper methods
 
     

@@ -16,6 +16,12 @@ struct ConversationView: View {
     @State var chatMesage = ""
     @State var participants = [User]()
     
+    @State var selectedImage: UIImage?
+    @State var isPickerShowing = false
+    
+    @State var isSourceMenuShowing = false
+    @State var source: UIImagePickerController.SourceType = .photoLibrary
+    
     var body: some View {
         
         
@@ -87,14 +93,17 @@ struct ConversationView: View {
                                     Spacer()
                                 }
                                 
-                                //Message
-                                Text(msg.msg)
-                                    .font(Font.bodyParagraph)
-                                    .foregroundColor(isFromUser ? Color("text-button") : Color("text-primary"))
-                                    .padding(.vertical, 16)
-                                    .padding(.horizontal, 24)
-                                    .background(isFromUser ? Color("bubble-primary") : Color("bubble-secondary"))
-                                    .cornerRadius(30, corners: isFromUser ? [.topLeft, .topRight, .bottomLeft] : [.topLeft, .topRight, .bottomRight])
+                                if msg.imageurl != ""{
+                                    //Photo message
+                                    
+                                    ConversationPhotoMessage(imageUrl: msg.imageurl!, isFromUser: isFromUser)
+
+                                }
+                                else{
+                                    //TextMessage
+                                    ConversationTextMessage(msg: msg.msg, isFromUser: isFromUser)
+                                }
+                                
                                 
                                 
                                 //Their message timestamp
@@ -134,60 +143,105 @@ struct ConversationView: View {
                 HStack(spacing: 15){
                     //Camera button
                     Button {
-                        //TODO: Show picker
+                        //Show picker
+                        isSourceMenuShowing = true
+                        
                     } label: {
                         Image(systemName: "camera")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
                             .tint(Color("icons-secondary"))
-                        
                     }
-       
+                           
                     //Textfield
                     ZStack{
                         Rectangle()
                             .foregroundColor(Color("date-pill"))
                             .cornerRadius(50)
                         
-                        
-                        TextField("Type your message", text: $chatMesage)
-                            .foregroundColor(Color("text-input"))
-                            .font(Font.bodyParagraph)
-                            .padding(10)
-                        
-                        //Emoji button
-                        HStack{
-                            Spacer()
+                        if selectedImage != nil{
+                            //Display image in message bar
+                            Text("Image")
+                                .foregroundColor(Color("text-input"))
+                                .font(Font.bodyParagraph)
+                                .padding(10)
                             
-                            Button {
-                                //Emojis
+                            //Delete button
+                            HStack{
+                                Spacer()
                                 
-                            } label: {
-                                Image(systemName: "face.smiling")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .foregroundColor(Color("text-input"))
+                                Button {
+                                    //Delete the image
+                                    selectedImage = nil
+                                    
+                                    
+                                } label: {
+                                    Image(systemName: "multiply.circle.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(Color("text-input"))
+                                }
+                                
                             }
+                            .padding(.trailing)
                             
                         }
-                        .padding(.trailing)
-                        
-                        
+                        else{
+                            TextField("Type your message", text: $chatMesage)
+                                .foregroundColor(Color("text-input"))
+                                .font(Font.bodyParagraph)
+                                .padding(10)
+                            
+                            //Emoji button
+                            HStack{
+                                Spacer()
+                                
+                                Button {
+                                    //Emojis
+                                    
+                                } label: {
+                                    Image(systemName: "face.smiling")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .foregroundColor(Color("text-input"))
+                                }
+                                
+                            }
+                            .padding(.trailing)
+                        }
+      
 
                     }
                     .frame(height: 44)
                     
                     //Sendbutton
                     Button {
-                        //TODO: Clean up text msg
                         
-                        //Send message
-                        chatViewModel.sendMessage(msg: chatMesage)
+                        //Check if image is selected, if so send image
                         
-                        //Clear textbox
-                        chatMesage = ""
+                        if selectedImage != nil{
+                            //Send image message
+                            chatViewModel.sendPhotoMesaage(image: selectedImage!)
+                            
+                            //Clear image
+                            selectedImage = nil
+                            
+                        }
+                        else{
+                            //Clean up text msg
+                            chatMesage = chatMesage.trimmingCharacters(in: .whitespacesAndNewlines)
+                            
+                            //Send message
+                            chatViewModel.sendMessage(msg: chatMesage)
+                            
+                            //Clear textbox
+                            chatMesage = ""
+                        }
+                        
+                        
                         
                     } label: {
                         Image(systemName: "paperplane.fill")
@@ -196,6 +250,8 @@ struct ConversationView: View {
                             .frame(width: 24, height: 24)
                             .tint(Color("icons-primary"))
                     }
+                    .disabled(chatMesage.trimmingCharacters(in: .whitespacesAndNewlines) == "" && selectedImage == nil)
+
                 }
                 .padding(.horizontal)
 
@@ -214,6 +270,37 @@ struct ConversationView: View {
             
             //Do any necesary clean up before conversation view disappears
             chatViewModel.conversationViewCleanup()
+        }
+        .confirmationDialog("From where ?", isPresented: $isSourceMenuShowing, actions: {
+            
+            Button {
+                //Set source to photo library
+                self.source = .photoLibrary
+                
+                //Show image picker
+                isPickerShowing = true
+            } label: {
+                Text("Photo Library")
+            }
+            
+            if UIImagePickerController.isSourceTypeAvailable(.camera){
+                Button {
+                    //Set source to photo library
+                    self.source = .camera
+                    
+                    //Show image picker
+                    isPickerShowing = true
+                } label: {
+                    Text("Take camera")
+                }
+            }
+            
+            
+            
+
+        })
+        .sheet(isPresented: $isPickerShowing) {
+            ImagePicker(selectedImage: $selectedImage, isPickerShowing: $isPickerShowing, source: source)
         }
     }
 }

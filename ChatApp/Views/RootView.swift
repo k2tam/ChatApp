@@ -12,6 +12,7 @@ struct RootView: View {
     //For detecting when the app state changes
     @Environment(\.scenePhase) var scenePhase
     
+    @EnvironmentObject var contactsViewModel: ContactsViewModel
     @EnvironmentObject var chatViewModel: ChatViewModel
     
     @State var tabSelected:Tabs = Tabs.contacts
@@ -41,6 +42,13 @@ struct RootView: View {
                 CustomTabBar(selectedTab: $tabSelected)
             }
         }
+        .onAppear(perform: {
+            if !isOnboarding{
+                //User has already onboarded, load contacts
+                contactsViewModel.getLocalContacts()
+                
+            }
+        })
         .fullScreenCover(isPresented: $isOnboarding) {
             //On Dismiss
         } content: {
