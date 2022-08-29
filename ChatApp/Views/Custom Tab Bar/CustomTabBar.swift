@@ -15,6 +15,7 @@ enum Tabs: Int{
 struct CustomTabBar: View {
     @Binding var selectedTab: Tabs
     @Binding var isChatShowing: Bool
+    @EnvironmentObject var chatViewModel : ChatViewModel
     
     var body: some View {
         
@@ -31,6 +32,9 @@ struct CustomTabBar: View {
             .tint(Color("icons-secondary"))
             
             Button {
+                //Clear the selected chat
+                chatViewModel.clearSelectedChat()
+                
                 //Show conversation view for new message
                 isChatShowing = true
                 
@@ -50,6 +54,8 @@ struct CustomTabBar: View {
             .tint(Color("icons-primary"))
             
             Button {
+                
+                
                 //Switch tab selected to Contacts
                 selectedTab = Tabs.contacts
             } label: {
