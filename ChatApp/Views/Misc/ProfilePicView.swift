@@ -13,6 +13,8 @@ struct ProfilePicView: View {
     
     var body: some View {
         
+        
+        
         ZStack {
             
             // Check if user has a photo set

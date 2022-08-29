@@ -51,15 +51,32 @@ class ChatViewModel: ObservableObject{
     }
     
     ///Search for chat with passed in user. If found, set as selected chat. If not found, create a new chat
-    func getChatFor(contact: User){
+    func getChatFor(contacts: [User]){
         
         //Check the user
-        guard contact.id != nil else{
-            return
+        for contact in contacts{
+            if contact.id == nil {return }
         }
         
+        //Create a set from the ids of the contacts passed in
+        let setOfContactIds = Set(arrayLiteral: contacts.map { u in u.id!})
+        
         let foundChat = chats.filter { chat in
-            return chat.numparticipants == 2 && chat.participantids.contains(contact.id!)
+            
+            let setOfParticipantIds = Set(arrayLiteral: chat.participantids)
+            
+            return chat.numparticipants == contacts.count+1 && setOfContactIds.isSubset(of: setOfParticipantIds)
+            // Another way
+//            switch contacts.count {
+//                case 1:
+//                    return chat.numparticipants == contacts.count + 1 && chat.participantids.contains(contacts[0].id!)
+//                case 2:
+//                    return chat.numparticipants == contacts.count + 1 && chat.participantids.contains(contacts[0].id!) && chat.participantids.contains(contacts[1].id!)
+//                case 3: return chat.numparticipants == contacts.count + 1 && chat.participantids.contains(contacts[0].id!) && chat.participantids.contains(contacts[1].id!) && chat.participantids.contains(contacts[2].id!)
+//
+//                default:
+//                return false
+//            }
         }
         
         if !foundChat.isEmpty{
@@ -72,13 +89,17 @@ class ChatViewModel: ObservableObject{
             
         }else{
             //No chat was found, create a new one
+            
+            //Create array of ids of all participants
+            var allParticipantIds = contacts.map { u in u.id!}
+            allParticipantIds.append(AuthViewModel.getLoggedInUserId())
+            
             var newChat = Chat(id: nil,
-                               numparticipants: 2,
-                               participantids: [AuthViewModel.getLoggedInUserId(), contact.id!],
+                               numparticipants: allParticipantIds.count,
+                               participantids: allParticipantIds,
                                lastmsg: nil,
                                updated: nil,
                                msgs: nil)
-            
             
             //Set as selected chat
             self.selectedChat = newChat
@@ -87,7 +108,7 @@ class ChatViewModel: ObservableObject{
             databaseServiece.createChat(chat: newChat) { docId in
                 
                 //Set doc id from the auto generated document in the database
-                self.selectedChat = Chat(id: docId, numparticipants: 2, participantids: [AuthViewModel.getLoggedInUserId(), contact.id!], lastmsg: nil, updated: nil, msgs: nil)
+                self.selectedChat = Chat(id: docId, numparticipants: 2, participantids: allParticipantIds, lastmsg: nil, updated: nil, msgs: nil)
                 
                 //Add chat to the chat list
                 self.chats.append(self.selectedChat!)

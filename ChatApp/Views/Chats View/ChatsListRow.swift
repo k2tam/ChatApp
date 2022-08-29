@@ -21,20 +21,49 @@ struct ChatsListRow: View {
             let participant = otherParticipants!.first
             
             //Profile image of participants
-            if participant != nil{
-                ProfilePicView(user: participant!)
-
+            if otherParticipants != nil && otherParticipants!.count == 1 {
+                //Display profile image of single participant
+                if participant != nil{
+                    ProfilePicView(user: participant!)
+                }
+            }
+            else if otherParticipants != nil && otherParticipants!.count > 1 {
+                //Display group profile fimage
+                GroupProfilePicView(users: otherParticipants!)
             }
             
             
-        
             
             VStack(alignment: .leading, spacing: 4){
                 //Name
-                Text(participant == nil ? "Unknown" :
-                        "\(participant!.firstName ?? "") \(participant!.lastName ?? "")")
+                if let otherParticipants = otherParticipants {
+                    
+                    Group{
+                        if otherParticipants.count == 1{
+                            
+                            Text("\(participant!.firstName ?? "") \(participant!.lastName ?? "")")
+                        
+                        }
+                        else if otherParticipants.count == 2{
+                            
+                            let participant2 = otherParticipants[1]
+                            
+                            Text("\(participant!.firstName ?? ""),\(participant2.firstName ?? "")")
+                              
+                        }
+                        else if otherParticipants.count > 2{
+                            let participant2 = otherParticipants[1]
+                            
+                            Text("\(participant!.firstName ?? ""), \(participant2.firstName ?? "") + \(otherParticipants.count-2) others")
+                                
+                        }
+                    }
                     .font(Font.button)
                     .foregroundColor(Color("text-primary"))
+                    
+                    
+                }
+   
                 
                 //Last message
                 Text(chat.lastmsg ?? "")
