@@ -14,6 +14,7 @@ enum Tabs: Int{
 }
 struct CustomTabBar: View {
     @Binding var selectedTab: Tabs
+    @Binding var isChatShowing: Bool
     
     var body: some View {
         
@@ -30,9 +31,10 @@ struct CustomTabBar: View {
             .tint(Color("icons-secondary"))
             
             Button {
-                //TODO:
+                //Show conversation view for new message
+                isChatShowing = true
                 
-                AuthViewModel.logOut()
+//                AuthViewModel.logOut()
             } label: {
                 VStack(alignment: .center, spacing: 4){
                     Image(systemName: "plus.circle.fill")
@@ -63,6 +65,6 @@ struct CustomTabBar: View {
 
 struct CustomTabBar_Previews: PreviewProvider {
     static var previews: some View {
-        CustomTabBar(selectedTab: Binding.constant(Tabs.chats))
+        CustomTabBar(selectedTab: Binding.constant(Tabs.chats), isChatShowing: Binding.constant(true))
     }
 }
